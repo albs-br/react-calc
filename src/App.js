@@ -52,7 +52,7 @@ function App() {
       
       <div className="w3-col l3 m4">
 
-        <div className="w3-container w3-teal">
+        <div className="w3-container w3-black">
           <h2>React Calculator</h2>
         </div>
         <form className="w3-container w3-card-4">
