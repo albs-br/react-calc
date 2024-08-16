@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import './components/Button.css';
 import { ButtonClear } from './components/ButtonClear';
 import { ButtonDigit } from './components/ButtonDigit';
 import { ButtonOperation } from './components/ButtonOperation';
