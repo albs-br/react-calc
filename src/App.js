@@ -8,8 +8,10 @@ import { ButtonOperation } from './components/ButtonOperation';
 function App() {
 
   const [calcVisorValue, setCalcVisorValue] = useState("0");
+  const [firstOperandValue, setFirstOperandValue] = useState("0");
+  const [operation, setOperation] = useState("");
 
-  const buttonPressed = (e, text) => {
+  const buttonDigitPressed = (e, text) => {
 
     console.log("buttonPressed");
 
@@ -29,7 +31,39 @@ function App() {
     console.log("buttonOperationPressed");
 
     e.preventDefault();
-   
+
+    if(operation !== "") {
+      executeOperation();
+
+      setOperation("");
+      setFirstOperandValue("0");
+    }
+    else {
+      setOperation(text);
+      setFirstOperandValue(calcVisorValue);
+      setCalcVisorValue("0");
+    }
+  };
+
+  const executeOperation = () => {
+    if(operation === "+") {
+      setCalcVisorValue((parseInt(firstOperandValue) + parseInt(calcVisorValue)).toString());
+    }
+    else if(operation === "-") {
+      setCalcVisorValue((parseInt(firstOperandValue) - parseInt(calcVisorValue)).toString());
+    }
+  }
+
+  const buttonEqualPressed = (e) => {
+
+    console.log("buttonEqualPressed");
+
+    e.preventDefault();
+
+    executeOperation();
+
+    setOperation("");
+    setFirstOperandValue("0");
   };
 
   const buttonClearPressed = (e) => {
@@ -38,6 +72,8 @@ function App() {
 
     e.preventDefault();
 
+    setOperation("");
+    setFirstOperandValue("0");
     setCalcVisorValue("0");
     
   };
@@ -58,30 +94,32 @@ function App() {
         </div>
         <form className="w3-container w3-card-4">
           <br />
+          firstOperandValue: {firstOperandValue}<br />
+          operation: {operation}<br />
           <p>      
-            <input className="w3-input w3-border" type="text" required="" value={calcVisorValue} readOnly="readonly"></input>
+            <input className="calcVisor w3-input w3-border" type="text" required="" value={calcVisorValue} readOnly="readonly"></input>
           </p>
           <p>
-            <ButtonDigit buttonPressed={buttonPressed} text="7"></ButtonDigit>
-            <ButtonDigit buttonPressed={buttonPressed} text="8"></ButtonDigit>
-            <ButtonDigit buttonPressed={buttonPressed} text="9"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="7"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="8"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="9"></ButtonDigit>
             <ButtonClear buttonClearPressed={buttonClearPressed}></ButtonClear>
           </p>
           <p>
-            <ButtonDigit buttonPressed={buttonPressed} text="4"></ButtonDigit>
-            <ButtonDigit buttonPressed={buttonPressed} text="5"></ButtonDigit>
-            <ButtonDigit buttonPressed={buttonPressed} text="6"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="4"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="5"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="6"></ButtonDigit>
             <ButtonOperation buttonOperationPressed={buttonOperationPressed} text="+"></ButtonOperation>
           </p>
           <p>
-            <ButtonDigit buttonPressed={buttonPressed} text="1"></ButtonDigit>
-            <ButtonDigit buttonPressed={buttonPressed} text="2"></ButtonDigit>
-            <ButtonDigit buttonPressed={buttonPressed} text="3"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="1"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="2"></ButtonDigit>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="3"></ButtonDigit>
             <ButtonOperation buttonOperationPressed={buttonOperationPressed} text="-"></ButtonOperation>
           </p>
           <p>
-            <ButtonDigit buttonPressed={buttonPressed} text="0"></ButtonDigit>
-            <ButtonOperation buttonOperationPressed={buttonOperationPressed} text="="></ButtonOperation>
+            <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="0"></ButtonDigit>
+            <ButtonOperation buttonOperationPressed={buttonEqualPressed} text="="></ButtonOperation>
             <ButtonOperation buttonOperationPressed={buttonOperationPressed} text="/"></ButtonOperation>
             <ButtonOperation buttonOperationPressed={buttonOperationPressed} text="x"></ButtonOperation>
           </p>

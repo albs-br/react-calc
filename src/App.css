@@ -16,3 +16,8 @@
 .App-link {
   color: #61dafb;
 }
+
+.calcVisor { 
+  text-align: right; 
+  font-size: xx-large;
+}
