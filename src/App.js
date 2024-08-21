@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import './components/Button.css';
 import { ButtonClear } from './components/ButtonClear';
@@ -9,11 +9,16 @@ function App() {
 
   const [calcVisorValue, setCalcVisorValue] = useState("0");
   const [firstOperandValue, setFirstOperandValue] = useState("0");
+  const [secondOperandValue, setSecondOperandValue] = useState("0");
   const [operation, setOperation] = useState("");
+
+  // useEffect(() => {
+  //   setFirstOperandValue(calcVisorValue);
+  // }, [calcVisorValue]);
 
   const buttonDigitPressed = (e, text) => {
 
-    console.log("buttonPressed");
+    // console.log("buttonPressed");
 
     e.preventDefault();
 
@@ -28,7 +33,7 @@ function App() {
 
   const buttonOperationPressed = (e, text) => {
 
-    console.log("buttonOperationPressed");
+    // console.log("buttonOperationPressed");
 
     e.preventDefault();
 
@@ -56,24 +61,25 @@ function App() {
 
   const buttonEqualPressed = (e) => {
 
-    console.log("buttonEqualPressed");
+    // console.log("buttonEqualPressed");
 
     e.preventDefault();
 
     executeOperation();
 
     setOperation("");
-    setFirstOperandValue("0");
+
   };
 
   const buttonClearPressed = (e) => {
   
-    console.log("buttonClearPressed");
+    // console.log("buttonClearPressed");
 
     e.preventDefault();
 
     setOperation("");
     setFirstOperandValue("0");
+    setSecondOperandValue("0");
     setCalcVisorValue("0");
     
   };
