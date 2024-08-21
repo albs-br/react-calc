@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 import './components/Button.css';
 import { ButtonClear } from './components/ButtonClear';
@@ -7,92 +7,112 @@ import { ButtonOperation } from './components/ButtonOperation';
 
 function App() {
 
-  const [calcVisorValue, setCalcVisorValue] = useState("0");
-  const [firstOperandValue, setFirstOperandValue] = useState("0");
-  const [secondOperandValue, setSecondOperandValue] = useState("0");
-  const [operation, setOperation] = useState("");
-
-  // useEffect(() => {
-  //   setFirstOperandValue(calcVisorValue);
-  // }, [calcVisorValue]);
+  const [calcProperties, setCalcProperties] = useState({
+    calcVisorValue: "0",
+    firstOperandValue: "0",
+    operation: "",
+  });
 
   const buttonDigitPressed = (e, text) => {
 
-    // console.log("buttonPressed");
-
     e.preventDefault();
 
-    if(calcVisorValue === "0") {
-      setCalcVisorValue(text);
+    if(calcProperties.calcVisorValue === "0") {
+      setCalcProperties({ ...calcProperties, calcVisorValue: text });
     }
     else {
-      setCalcVisorValue(calcVisorValue + text);
+      setCalcProperties({ ...calcProperties, calcVisorValue: calcProperties.calcVisorValue + text });
     }
-    
+
   };
 
   const buttonOperationPressed = (e, text) => {
 
-    // console.log("buttonOperationPressed");
-
     e.preventDefault();
 
-    if(operation !== "") {
-      executeOperation();
+    if(calcProperties.operation !== "") {
+      executeConcatOperation();
 
-      setOperation("");
-      setFirstOperandValue("0");
+      //setCalcProperties({ ...calcProperties, operation: "" });
     }
     else {
-      setOperation(text);
-      setFirstOperandValue(calcVisorValue);
-      setCalcVisorValue("0");
+
+      setCalcProperties({
+        calcVisorValue: "0",
+        firstOperandValue: calcProperties.calcVisorValue,
+        operation: text,
+      });
     }
   };
 
   const executeOperation = () => {
-    if(operation === "+") {
-      setCalcVisorValue((parseInt(firstOperandValue) + parseInt(calcVisorValue)).toString());
+    if(calcProperties.operation === "+") {
+
+      setCalcProperties({
+        calcVisorValue: (parseInt(calcProperties.firstOperandValue) + parseInt(calcProperties.calcVisorValue)).toString(),
+        firstOperandValue: calcProperties.calcVisorValue,
+        operation: "",
+      });
     }
-    else if(operation === "-") {
-      setCalcVisorValue((parseInt(firstOperandValue) - parseInt(calcVisorValue)).toString());
+    else if(calcProperties.operation === "-") {
+      setCalcProperties({
+        calcVisorValue: (parseInt(calcProperties.firstOperandValue) - parseInt(calcProperties.calcVisorValue)).toString(),
+        firstOperandValue: calcProperties.calcVisorValue,
+        operation: "",
+      });
     }
+  }
+
+  const executeConcatOperation = () => {
+    if(calcProperties.operation === "+") {
+
+      let temp = (parseInt(calcProperties.firstOperandValue) + parseInt(calcProperties.calcVisorValue)).toString();
+
+      setCalcProperties({ ...calcProperties, calcVisorValue: temp,
+        firstOperandValue: temp });
+      
+      // setCalcProperties({
+      //   calcVisorValue: temp,
+      //   firstOperandValue: temp,
+      //   operation: "",
+      // });
+    }
+    // else if(calcProperties.operation === "-") {
+    //   setCalcProperties({
+    //     calcVisorValue: (parseInt(calcProperties.firstOperandValue) - parseInt(calcProperties.calcVisorValue)).toString(),
+    //     firstOperandValue: calcProperties.calcVisorValue,
+    //     operation: "",
+    //   });
+    // }
   }
 
   const buttonEqualPressed = (e) => {
 
-    // console.log("buttonEqualPressed");
-
     e.preventDefault();
 
     executeOperation();
-
-    setOperation("");
-
   };
 
   const buttonClearPressed = (e) => {
-  
-    // console.log("buttonClearPressed");
 
     e.preventDefault();
 
-    setOperation("");
-    setFirstOperandValue("0");
-    setSecondOperandValue("0");
-    setCalcVisorValue("0");
-    
+    setCalcProperties({
+      calcVisorValue: "0",
+      firstOperandValue: "0",
+      operation: "",
+    });
   };
-  
+
   return (
     <div className="App">
-      
+
       <br />
 
       <div className="w3-col l4 m4">
         &nbsp;
-      </div>      
-      
+      </div>
+
       <div className="w3-col l3 m4">
 
         <div className="w3-container w3-black">
@@ -100,10 +120,11 @@ function App() {
         </div>
         <form className="w3-container w3-card-4">
           <br />
-          firstOperandValue: {firstOperandValue}<br />
-          operation: {operation}<br />
-          <p>      
-            <input className="calcVisor w3-input w3-border" type="text" required="" value={calcVisorValue} readOnly="readonly"></input>
+          {calcProperties.firstOperandValue}<br />
+          {calcProperties.operation}<br />
+          {calcProperties.calcVisorValue}<br />
+          <p>
+            <input className="calcVisor w3-input w3-border" type="text" required="" value={calcProperties.calcVisorValue} readOnly="readonly"></input>
           </p>
           <p>
             <ButtonDigit buttonDigitPressed={buttonDigitPressed} text="7"></ButtonDigit>
