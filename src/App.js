@@ -11,17 +11,18 @@ function App() {
     calcVisorValue: "0",
     firstOperandValue: "0",
     operation: "",
+    isResult: false,
   });
 
   const buttonDigitPressed = (e, text) => {
 
     e.preventDefault();
 
-    if(calcProperties.calcVisorValue === "0") {
-      setCalcProperties({ ...calcProperties, calcVisorValue: text });
+    if(calcProperties.isResult || calcProperties.calcVisorValue === "0") {
+      setCalcProperties({ ...calcProperties, calcVisorValue: text, isResult: false });
     }
     else {
-      setCalcProperties({ ...calcProperties, calcVisorValue: calcProperties.calcVisorValue + text });
+      setCalcProperties({ ...calcProperties, calcVisorValue: calcProperties.calcVisorValue + text, isResult: false });
     }
 
   };
@@ -31,9 +32,7 @@ function App() {
     e.preventDefault();
 
     if(calcProperties.operation !== "") {
-      executeConcatOperation();
-
-      //setCalcProperties({ ...calcProperties, operation: "" });
+      executeConcatOperation(text);
     }
     else {
 
@@ -46,44 +45,40 @@ function App() {
   };
 
   const executeOperation = () => {
+    let temp;
     if(calcProperties.operation === "+") {
-
-      setCalcProperties({
-        calcVisorValue: (parseInt(calcProperties.firstOperandValue) + parseInt(calcProperties.calcVisorValue)).toString(),
-        firstOperandValue: calcProperties.calcVisorValue,
-        operation: "",
-      });
+      temp = (parseInt(calcProperties.firstOperandValue) + parseInt(calcProperties.calcVisorValue)).toString();
     }
     else if(calcProperties.operation === "-") {
-      setCalcProperties({
-        calcVisorValue: (parseInt(calcProperties.firstOperandValue) - parseInt(calcProperties.calcVisorValue)).toString(),
-        firstOperandValue: calcProperties.calcVisorValue,
-        operation: "",
-      });
+      temp = (parseInt(calcProperties.firstOperandValue) - parseInt(calcProperties.calcVisorValue)).toString();
     }
+
+    setCalcProperties({
+      calcVisorValue: temp,
+      firstOperandValue: calcProperties.calcVisorValue,
+      operation: "",
+      isResult: true,
+    });
+
   }
 
-  const executeConcatOperation = () => {
+  const executeConcatOperation = (nextOperation) => {
+
+    let temp;
     if(calcProperties.operation === "+") {
-
-      let temp = (parseInt(calcProperties.firstOperandValue) + parseInt(calcProperties.calcVisorValue)).toString();
-
-      setCalcProperties({ ...calcProperties, calcVisorValue: temp,
-        firstOperandValue: temp });
-      
-      // setCalcProperties({
-      //   calcVisorValue: temp,
-      //   firstOperandValue: temp,
-      //   operation: "",
-      // });
+      temp = (parseInt(calcProperties.firstOperandValue) + parseInt(calcProperties.calcVisorValue)).toString();
     }
-    // else if(calcProperties.operation === "-") {
-    //   setCalcProperties({
-    //     calcVisorValue: (parseInt(calcProperties.firstOperandValue) - parseInt(calcProperties.calcVisorValue)).toString(),
-    //     firstOperandValue: calcProperties.calcVisorValue,
-    //     operation: "",
-    //   });
-    // }
+    else if(calcProperties.operation === "-") {
+      temp = (parseInt(calcProperties.firstOperandValue) - parseInt(calcProperties.calcVisorValue)).toString();
+    }
+
+    setCalcProperties({ ...calcProperties, 
+      calcVisorValue: temp,
+      firstOperandValue: temp,
+      operation: nextOperation,
+      isResult: true 
+    });
+
   }
 
   const buttonEqualPressed = (e) => {
@@ -123,6 +118,7 @@ function App() {
           {calcProperties.firstOperandValue}<br />
           {calcProperties.operation}<br />
           {calcProperties.calcVisorValue}<br />
+          {(calcProperties.isResult) ? "true" : "false" }<br />
           <p>
             <input className="calcVisor w3-input w3-border" type="text" required="" value={calcProperties.calcVisorValue} readOnly="readonly"></input>
           </p>
